@@ -3,7 +3,7 @@
 ## Project
 
 ### Abstract
-This project focuses on Time Series Weather Forecasting based on the Jena climate dataset by the Max Planck Institute for Biogeochemistry. Specifically, in this project, the goal is to predict the a future temperature based on some amount of past data. As there are different types of network architectures that can be used to approach this, a few were selected and evaluated to compare them. 
+This project focuses on Time Series Weather Forecasting based on the Jena climate dataset by the Max Planck Institute for Biogeochemistry. Specifically, in this project, the goal is to predict the a future temperature based on some amount of past data. As there are different types of network architectures that can be used to approach this, a few were selected and evaluated based on MSE to compare them. 
 
 ### Video
 
@@ -77,7 +77,7 @@ The training data was also normalized, and the evaluation and test sets were nor
 
 #### WeatherDataset
 
-The dataset itself consists of inputs and labels. 
+The dataset itself consists of inputs and targets. 
 
 Each input is a Tensor of shape (input length, 19), where input length is the number of past points we want to0 use to predict the future points. In this project, the input length for all models was 12 (so we were using the past 12 hours worth of data).
 
@@ -128,14 +128,13 @@ The Neural Net consists of:
 ### Training
 The training set was the first ~70% of the data points.
 Training was based on previous homeworks. Some specifics I used were:
-- criterion = mean average loss. (I accidently used cross entropy at first and panicked when the loss when into -500.)
+- criterion = mean squared error
 - number of epochs = 10
 - optimizer = Adam
 - learning rate = 0.002
 - weight decay = 0.0005
 - train batch size = 128
 - test batch size = 128
-
 
 ### Testing
  
@@ -145,13 +144,60 @@ Training was based on previous homeworks. Some specifics I used were:
 
 I saved ~10% of the data set for evaluation for plot purposes, but only really ended up using only one point in the evaluation set to graph... Oops.
 
-- Add plots
-- Discuss results
+The results were evaluated by looking at the mean squared error. I accidently used cross entropy at first and was like, wow, why is the loss -500???
+
+Anyways, I also evaluated it by taking a sample and getting the prediction foreach model. Then, the predictions were plotted alongside the targets. This made me realize that MSE can be deceptive: the loss for each model was fairly low, but each point itself differed more than I expected.
+
+I think overall, the LSTM, GRU, Transformer, and Neural Net all perform similarly in terms of MSE, but the Transformer itself looks like it generally follows the trend.
+
+### Evaluation Plots
+
+#### Baseline
+![eval_base](https://user-images.githubusercontent.com/79888079/146132841-96a7e23e-0c45-476c-9422-b670ba719564.png)
+
+#### LSTM
+![eval_lstm](https://user-images.githubusercontent.com/79888079/146132920-225b546d-f887-41d6-ac55-ec5b118c268d.png)
+
+#### GRU
+![eval_gru](https://user-images.githubusercontent.com/79888079/146132902-38c72741-2f72-4b21-98b7-ba1c1f29270d.png)
+
+#### Transformer
+![eval_transformer](https://user-images.githubusercontent.com/79888079/146132964-898727a4-f1dd-400c-b4b7-67343aa8658a.png)
+
+#### Neural Net
+![eval_neural](https://user-images.githubusercontent.com/79888079/146132946-428ebfa2-49be-4e8f-891f-54bdbf1240c3.png)
+
+### MSE Plots
+
+#### Baseline
+![base_model](https://user-images.githubusercontent.com/79888079/146139817-6005bb8e-0132-473f-a9c8-eb7402108d4b.png)
+
+#### LSTM
+![LSTM](https://user-images.githubusercontent.com/79888079/146133615-2fb955e6-2502-4d52-af77-875fb9c70f29.png)
+
+#### GRU
+![GRU](https://user-images.githubusercontent.com/79888079/146133660-1d778d18-189b-4967-a376-31959777aad1.png)
+
+#### Transformer
+![transformer](https://user-images.githubusercontent.com/79888079/146133755-78c11621-f817-4701-91ff-c2aebac1a080.png)
+
+#### Neural Net
+![neural](https://user-images.githubusercontent.com/79888079/146133806-c5f77930-0b05-4287-b995-0d7960c783a9.png)
 
 ## Discussion
-
 Honestly, I was just a little bit disappointed by the results. I probably should have expected that the LSTM RNN and the GRU RNN were similar because they're both RNNs, but the the fact that the Transformer didn't really do better did suck a little. I was like, "Ooh, self-attention!", but the LSTM and GRU basically did marginally better anyways. I'm also concerned that I messed up on the mask for the Transformer, so hopefully that was done okay (if not, I completely blame the PyTorch tutorial).
 
 Anyways, after being disappointed by the RNNs, I threw in a basic neural network with linear layers just to see how it compared. And it did similar to the others, if not better??? Am I messing up the training or something? 
 
-Also: loss is deceptive. At least, average loss. Average loss was ~0.08 which seems good, and then I plotted the predictions vs. the target and it was a lot more off then I thought!
+The other thing that I wanted to talk about is the weirdness of using weather forecasting deep learning models. When I was researching for this project, I also came across lots of research on the impacts of deep learning models on climate change due to the computational resources it needs. Even though it's a separate arena, weather forecasting
+also needs to take into account climate change,  but it also potentially makes things a little worse. Kind of crazy.
+
+And as the last point, here are some learning lessons (or me complaining):
+- pandas was more confusing than expected
+- Converting TensorFlow and Keras logic to PyTorch is also harder than expected
+
+Overall though, I'm pretty pleased with the project. The results weren't what I expected, but I learned a lot so it was definitely worth it.
+
+Thanks for taking a look at my project!
+
+
