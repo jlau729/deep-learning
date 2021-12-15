@@ -1,11 +1,13 @@
 # CSE 490L: Deep Learning Project
 
 ## Project
-
+ 
 ### Abstract
 This project focuses on Time Series Weather Forecasting based on the Jena climate dataset by the Max Planck Institute for Biogeochemistry. Specifically, in this project, the goal is to predict the a future temperature based on some amount of past data. As there are different types of network architectures that can be used to approach this, a few were selected and evaluated based on MSE to compare them. 
 
 ### Video
+
+https://user-images.githubusercontent.com/79888079/146142338-5af39ee6-029d-47c8-a450-cd3ce02e3497.mp4
 
 ## Introduction
 The goal of this project is to explore different network architectures that can be used for time series weather forecasting. This problem seemed interesting for a number of reasons:
